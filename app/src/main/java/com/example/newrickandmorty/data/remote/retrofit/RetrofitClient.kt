@@ -1,10 +1,9 @@
 package com.example.newrickandmorty.data.remote.retrofit
 
 import com.example.newrickandmorty.common.constants.Constants
-import com.example.newrickandmorty.data.models.CharacterModel
-import com.example.newrickandmorty.data.remote.apiservices.CharacterApi
-import com.example.newrickandmorty.data.remote.apiservices.EpisodeApi
-import com.example.newrickandmorty.data.remote.apiservices.LocationApi
+import com.example.newrickandmorty.data.remote.apiservices.CharacterApiService
+import com.example.newrickandmorty.data.remote.apiservices.EpisodeApiService
+import com.example.newrickandmorty.data.remote.apiservices.LocationApiService
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -30,12 +29,12 @@ class RetrofitClient {
         .client(okHttpClient)
         .build()
 
-    fun provideCharacterApiService() : CharacterApi =
-        provideRetrofit.create(CharacterApi::class.java)
+    fun provideCharacterApiService() : CharacterApiService =
+        provideRetrofit.create(CharacterApiService::class.java)
 
-    fun provideEpisodeApiService() : EpisodeApi =
-        provideRetrofit.create(EpisodeApi::class.java)
+    fun provideEpisodeApiService() : EpisodeApiService =
+        provideRetrofit.create(EpisodeApiService::class.java)
 
-    fun provideLocationApiService() : LocationApi =
-        provideRetrofit.create(LocationApi::class.java)
+    fun provideLocationApiService() : LocationApiService =
+        provideRetrofit.create(LocationApiService::class.java)
 }

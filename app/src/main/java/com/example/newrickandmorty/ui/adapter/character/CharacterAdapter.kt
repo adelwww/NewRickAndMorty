@@ -2,51 +2,39 @@ package com.example.newrickandmorty.ui.adapter.character
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.example.newrickandmorty.base.BaseDiffUtilItemCallback
 import com.example.newrickandmorty.common.extensions.setImage
 import com.example.newrickandmorty.data.models.CharacterModel
 import com.example.newrickandmorty.databinding.ItemCharacterBinding
 
-class CharacterAdapter (
-  //  val onItemClick: (id: Int) ->Unit
-) : RecyclerView.Adapter<CharacterAdapter.CharaViewHolder>() {
+class CharacterAdapter ()
+    : PagingDataAdapter<CharacterModel, CharacterAdapter.CharacterViewHolder>(
+    BaseDiffUtilItemCallback()
+) {
 
-    private var list: List<CharacterModel> = arrayListOf()
-
-    fun setList(list: List<CharacterModel>) {
-        this.list = list
-        notifyDataSetChanged()
-    }
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CharaViewHolder =
-        CharaViewHolder(
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CharacterViewHolder {
+        return CharacterViewHolder(
             ItemCharacterBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,
-                false
-            )
-        )
-
-    override fun onBindViewHolder(holder: CharaViewHolder, position: Int) {
-        holder.onBind(list[position])
+                false))
     }
 
-    override fun getItemCount(): Int = list.size
+    override fun onBindViewHolder(holder: CharacterViewHolder, position: Int) {
+        getItem(position)?.let { holder.onBind(it) }
+    }
 
-    inner class CharaViewHolder(
+    inner class CharacterViewHolder(
         private val binding: ItemCharacterBinding
     ) : RecyclerView.ViewHolder(binding.root){
 
         fun onBind(characterModel: CharacterModel) = with(binding) {
-//            itemView.setOnClickListener {
-//                onItemClick(characterCv.id)
-//            }
             statusCharacterTv.text = characterModel.status
             nameCharacterTv.text = characterModel.name
             characterIm.setImage(characterModel.image)
 
         }
-
     }
-
 }

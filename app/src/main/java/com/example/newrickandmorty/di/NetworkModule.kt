@@ -1,8 +1,8 @@
 package com.example.newrickandmorty.di
 
-import com.example.newrickandmorty.data.remote.apiservices.CharacterApi
-import com.example.newrickandmorty.data.remote.apiservices.EpisodeApi
-import com.example.newrickandmorty.data.remote.apiservices.LocationApi
+import com.example.newrickandmorty.data.remote.apiservices.CharacterApiService
+import com.example.newrickandmorty.data.remote.apiservices.EpisodeApiService
+import com.example.newrickandmorty.data.remote.apiservices.LocationApiService
 import com.example.newrickandmorty.data.remote.retrofit.RetrofitClient
 import dagger.Module
 import dagger.Provides
@@ -19,17 +19,18 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun providesCharacterApi(): CharacterApi =
+    fun providesCharacterApi(): CharacterApiService =
         retrofit.provideCharacterApiService()
 
     @Provides
     @Singleton
-    fun providesEpisodeApi(): EpisodeApi =
+    fun providesEpisodeApi(): EpisodeApiService =
         retrofit.provideEpisodeApiService()
 
     @Provides
     @Singleton
-    fun providesLocationApi(): LocationApi =
+    fun providesLocationApi(): LocationApiService =
         retrofit.provideLocationApiService()
+
 
 }

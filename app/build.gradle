@@ -4,6 +4,7 @@ plugins {
 
     //Kapt
     id 'kotlin-kapt'
+    //hilt
     id 'dagger.hilt.android.plugin'
 
 }
@@ -105,5 +106,20 @@ dependencies {
 
     // | for LiveData
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version"
+
+    // Paging 3
+    def paging_version = "3.1.0"
+    implementation "androidx.paging:paging-runtime-ktx:$paging_version"
+
+    //Coroutines
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.0-RC3'
+
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.0-RC")
+
+    // Coil
+    implementation "io.coil-kt:coil:1.3.2"
+
+    // SwipeRefreshLayout
+    implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
 
 }

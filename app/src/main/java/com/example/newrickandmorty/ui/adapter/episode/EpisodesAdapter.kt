@@ -2,45 +2,42 @@ package com.example.newrickandmorty.ui.adapter.episode
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.example.newrickandmorty.base.BaseDiffUtilItemCallback
+import com.example.newrickandmorty.common.extensions.setImage
+import com.example.newrickandmorty.data.models.CharacterModel
 import com.example.newrickandmorty.data.models.EpisodesModel
+import com.example.newrickandmorty.databinding.ItemCharacterBinding
 import com.example.newrickandmorty.databinding.ItemEpisodeBinding
+import com.example.newrickandmorty.ui.adapter.character.CharacterAdapter
 
-class EpisodesAdapter(): RecyclerView.Adapter<EpisodesAdapter.EpisodesViewHolder>() {
+class EpisodesAdapter()
+    : PagingDataAdapter<EpisodesModel, EpisodesAdapter.EpisodeViewHolder>(
+    BaseDiffUtilItemCallback()
+) {
 
-    private var list: List<EpisodesModel> = arrayListOf()
-
-    fun setList(list: List<EpisodesModel>) {
-        this.list = list
-        notifyDataSetChanged()
-    }
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): EpisodesViewHolder =
-        EpisodesViewHolder(
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): EpisodeViewHolder {
+        return EpisodeViewHolder(
             ItemEpisodeBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,
-                false
-            )
-        )
-
-    override fun onBindViewHolder(holder: EpisodesViewHolder, position: Int) {
-        holder.onBind(list[position])
+                false))
     }
 
-    override fun getItemCount(): Int = list.size
+    override fun onBindViewHolder(holder: EpisodeViewHolder, position: Int) {
+        getItem(position)?.let { holder.onBind(it) }
+    }
 
-    inner class EpisodesViewHolder(
+    inner class EpisodeViewHolder(
         private val binding: ItemEpisodeBinding
     ) : RecyclerView.ViewHolder(binding.root){
 
         fun onBind(episodesModel: EpisodesModel) = with(binding) {
 
-           binding.tvName.text = episodesModel.name
-           binding.tvEpisodes.text = episodesModel.episodes
+            binding.tvName.text = episodesModel.name
+            binding.tvEpisodes.text = episodesModel.episodes
 
         }
-
     }
-
 }

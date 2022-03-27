@@ -1,8 +1,9 @@
 package com.example.newrickandmorty.ui.fragments.location
 
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import androidx.paging.cachedIn
 import com.example.newrickandmorty.base.BaseViewModel
-import com.example.newrickandmorty.data.remote.repository.LocationRepository
+import com.example.newrickandmorty.data.repository.LocationRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -11,6 +12,6 @@ class LocationViewModel @Inject constructor(
     private val locationRepository: LocationRepository
 ): BaseViewModel() {
 
-    fun fetchLocation() = locationRepository.fetchLocation()
+    fun fetchLocations() = locationRepository.fetchLocations().cachedIn(viewModelScope)
 
 }

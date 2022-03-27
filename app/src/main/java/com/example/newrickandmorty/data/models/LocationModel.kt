@@ -1,11 +1,12 @@
 package com.example.newrickandmorty.data.models
 
+import com.example.newrickandmorty.base.IBaseDiffModel
 import com.google.gson.annotations.SerializedName
 
 data class LocationModel(
 
     @SerializedName("id")
-    val id: Int,
+    override val id: Int,
 
     @SerializedName("name")
     val name: String,
@@ -16,4 +17,4 @@ data class LocationModel(
     @SerializedName("url")
     private var url: String
 
-)
+) : IBaseDiffModel

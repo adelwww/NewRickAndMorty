@@ -3,11 +3,14 @@ package com.example.newrickandmorty.data.remote.apiservices
 import com.example.newrickandmorty.data.models.EpisodesModel
 import com.example.newrickandmorty.data.models.RickAndMortyResponse
 import retrofit2.http.GET
+import retrofit2.http.Query
 
-interface EpisodeApi {
+interface EpisodeApiService {
 
     @GET("api/episode")
-    suspend fun fetchEpisode(): RickAndMortyResponse<EpisodesModel>
+    suspend fun fetchEpisode(
+        @Query("page") page: Int
+    ): RickAndMortyResponse<EpisodesModel>
 
 
 }

@@ -2,33 +2,31 @@ package com.example.newrickandmorty.ui.adapter.location
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.example.newrickandmorty.base.BaseDiffUtilItemCallback
+import com.example.newrickandmorty.common.extensions.setImage
+import com.example.newrickandmorty.data.models.CharacterModel
 import com.example.newrickandmorty.data.models.LocationModel
+import com.example.newrickandmorty.databinding.ItemCharacterBinding
 import com.example.newrickandmorty.databinding.ItemLocationBinding
+import com.example.newrickandmorty.ui.adapter.character.CharacterAdapter
 
-class LocationAdapter (): RecyclerView.Adapter<LocationAdapter.LocationViewHolder>() {
+class LocationAdapter () : PagingDataAdapter<LocationModel, LocationAdapter.LocationViewHolder>(
+    BaseDiffUtilItemCallback()
+) {
 
-    private var list: List<LocationModel> = arrayListOf()
-
-    fun setList(list: List<LocationModel>) {
-        this.list = list
-        notifyDataSetChanged()
-    }
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LocationViewHolder =
-        LocationViewHolder(
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LocationViewHolder {
+        return LocationViewHolder(
             ItemLocationBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,
-                false
-            )
-        )
-
-    override fun onBindViewHolder(holder: LocationViewHolder, position: Int) {
-        holder.onBind(list[position])
+                false))
     }
 
-    override fun getItemCount(): Int = list.size
+    override fun onBindViewHolder(holder: LocationViewHolder, position: Int) {
+        getItem(position)?.let { holder.onBind(it) }
+    }
 
     inner class LocationViewHolder(
         private val binding: ItemLocationBinding
@@ -38,9 +36,6 @@ class LocationAdapter (): RecyclerView.Adapter<LocationAdapter.LocationViewHolde
 
             binding.tvName.text = locationModel.name
             binding.tvLocation.text = locationModel.type
-
         }
-
     }
-
 }

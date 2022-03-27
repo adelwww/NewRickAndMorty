@@ -1,15 +1,16 @@
 package com.example.newrickandmorty.ui.fragments.character
 
-import android.util.Log
-import androidx.fragment.app.Fragment
+import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
+import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.example.newrickandmorty.R
 import com.example.newrickandmorty.base.BaseFragment
-import com.example.newrickandmorty.common.resource.Resource
 import com.example.newrickandmorty.databinding.FragmentCharacterBinding
 import com.example.newrickandmorty.ui.adapter.character.CharacterAdapter
+import com.example.newrickandmorty.ui.adapter.paging.CommonLoadStateAdapter
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -20,31 +21,28 @@ class CharacterFragment : BaseFragment<FragmentCharacterBinding, CharacterViewMo
     override val viewModel: CharacterViewModel by viewModels()
     private val characterAdapter = CharacterAdapter()
 
-    override fun setupObserves() {
-        subscribeToCharacter()
-    }
-
     override fun setupViews() {
         setupAdapter()
     }
 
-    private fun setupAdapter() = with(binding) {
-        recyclerCharacter.adapter = characterAdapter
-        recyclerCharacter.layoutManager = LinearLayoutManager(context)
+    override fun setupObserves() {
+        subscribeToCharacter()
+    }
+
+    private fun setupAdapter() = with(binding.recyclerCharacter) {
+        layoutManager = LinearLayoutManager(context)
+        adapter = characterAdapter.withLoadStateFooter(CommonLoadStateAdapter {
+            characterAdapter.refresh()
+        })
+        characterAdapter.addLoadStateListener { loadStates ->
+            this.isVisible = loadStates.refresh is LoadState.NotLoading
+        }
     }
 
     private fun subscribeToCharacter() {
-        viewModel.fetchCharacter().observe(viewLifecycleOwner){
-            when(it){
-                is Resource.Loading -> {
-                    Log.e("anime","loading")
-                }
-                is Resource.Error -> {
-                    Log.e("anime","error")
-                }
-                is Resource.Success -> {
-                    it.data?.results?.let { it1 -> characterAdapter.setList(it1) }
-                }
+        viewModel.fetchCharacters().observe(this){
+            lifecycleScope.launchWhenStarted {
+                characterAdapter.submitData(it)
             }
         }
     }

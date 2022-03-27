@@ -1,12 +1,12 @@
 package com.example.newrickandmorty.data.models
 
-import com.google.gson.annotations.Expose
+import com.example.newrickandmorty.base.IBaseDiffModel
 import com.google.gson.annotations.SerializedName
 
 data class EpisodesModel(
 
     @SerializedName("id")
-    val id: Int,
+    override val id: Int,
 
     @SerializedName("name")
     var name: String,
@@ -17,4 +17,4 @@ data class EpisodesModel(
     @SerializedName("url")
     private var url: String
 
-)
+) : IBaseDiffModel
