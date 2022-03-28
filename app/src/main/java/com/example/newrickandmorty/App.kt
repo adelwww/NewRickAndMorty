@@ -1,9 +1,8 @@
-package com.example.newrickandmorty.ui
+package com.example.newrickandmorty
 
 import android.app.Application
 import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.HiltAndroidApp
 
 @HiltAndroidApp
-class App : Application() {
-}
+class App : Application()
