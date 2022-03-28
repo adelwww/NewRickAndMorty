@@ -27,7 +27,8 @@ class MainActivity : AppCompatActivity() {
         val appBarConfiguration = AppBarConfiguration.Builder(
             R.id.characterFragment,
             R.id.locationFragment,
-            R.id.episodeFragment)
+            R.id.episodeFragment
+        ).build()
         NavigationUI.setupWithNavController(binding.bNav, navController)
     }
 }
