@@ -1,10 +1,14 @@
-package com.example.newrickandmorty.data.models
+package com.example.newrickandmorty.data.remote.models
 
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import com.example.newrickandmorty.base.IBaseDiffModel
 import com.google.gson.annotations.SerializedName
 
+@Entity(tableName = "location")
 data class LocationModel(
 
+    @PrimaryKey(autoGenerate = false)
     @SerializedName("id")
     override val id: Int,
 
@@ -15,6 +19,6 @@ data class LocationModel(
     val type: String,
 
     @SerializedName("url")
-    private var url: String
+     var url: String
 
 ) : IBaseDiffModel

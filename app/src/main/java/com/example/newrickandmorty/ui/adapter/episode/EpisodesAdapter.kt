@@ -2,18 +2,13 @@ package com.example.newrickandmorty.ui.adapter.episode
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.paging.PagingDataAdapter
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.newrickandmorty.base.BaseDiffUtilItemCallback
-import com.example.newrickandmorty.common.extensions.setImage
-import com.example.newrickandmorty.data.models.CharacterModel
-import com.example.newrickandmorty.data.models.EpisodesModel
-import com.example.newrickandmorty.databinding.ItemCharacterBinding
+import com.example.newrickandmorty.data.remote.models.EpisodesModel
 import com.example.newrickandmorty.databinding.ItemEpisodeBinding
-import com.example.newrickandmorty.ui.adapter.character.CharacterAdapter
 
-class EpisodesAdapter()
-    : PagingDataAdapter<EpisodesModel, EpisodesAdapter.EpisodeViewHolder>(
+class EpisodesAdapter : ListAdapter<EpisodesModel, EpisodesAdapter.EpisodeViewHolder>(
     BaseDiffUtilItemCallback()
 ) {
 
@@ -25,8 +20,11 @@ class EpisodesAdapter()
                 false))
     }
 
+
+
     override fun onBindViewHolder(holder: EpisodeViewHolder, position: Int) {
         getItem(position)?.let { holder.onBind(it) }
+
     }
 
     inner class EpisodeViewHolder(

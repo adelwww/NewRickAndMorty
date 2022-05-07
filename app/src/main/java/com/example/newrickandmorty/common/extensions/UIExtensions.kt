@@ -7,3 +7,4 @@ fun ImageView.setImage(url: String) =
     Glide.with(this)
         .load(url)
         .into(this)
+

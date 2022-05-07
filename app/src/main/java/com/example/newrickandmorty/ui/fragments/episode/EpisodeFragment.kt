@@ -1,19 +1,13 @@
 package com.example.newrickandmorty.ui.fragments.episode
 
-import android.util.Log
-import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
-import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.example.newrickandmorty.R
 import com.example.newrickandmorty.base.BaseFragment
-import com.example.newrickandmorty.common.resource.Resource
 import com.example.newrickandmorty.databinding.FragmentEpisodeBinding
 import com.example.newrickandmorty.ui.adapter.episode.EpisodesAdapter
-import com.example.newrickandmorty.ui.adapter.paging.CommonLoadStateAdapter
-import com.example.newrickandmorty.ui.fragments.character.CharacterViewModel
+import com.example.newrickandmorty.utils.PaginationScrollListener
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -27,6 +21,7 @@ class EpisodeFragment : BaseFragment<FragmentEpisodeBinding, EpisodeViewModel>(
 
     override fun setupObserves() {
         subscribeToEpisode()
+        subscribeToEpisodeLocal()
     }
 
     override fun setupViews() {
@@ -34,20 +29,33 @@ class EpisodeFragment : BaseFragment<FragmentEpisodeBinding, EpisodeViewModel>(
     }
 
     private fun setupAdapter() = with(binding.recyclerEpisode) {
-        layoutManager = LinearLayoutManager(context)
-        adapter = episodesAdapter.withLoadStateFooter(CommonLoadStateAdapter {
-            episodesAdapter.refresh()
+        val linerLayoutManager = LinearLayoutManager(context)
+        layoutManager = linerLayoutManager
+        adapter = episodesAdapter
+
+        addOnScrollListener(object :
+            PaginationScrollListener(linerLayoutManager, {
+                if (isOnline(context)) viewModel.fetchEpisodes()
+                else null
+            }) {
+            override fun isLoading() = viewModel.isLoading
         })
-        episodesAdapter.addLoadStateListener { loadStates ->
-            this.isVisible = loadStates.refresh is LoadState.NotLoading
-        }
+    }
+
+    override fun setupRequests() {
+        if (viewModel.episodeState.value == null && isOnline(context)) viewModel.fetchEpisodes()
+        else viewModel.getEpisodes()
     }
 
     private fun subscribeToEpisode() {
-        viewModel.fetchEpisodes().observe(this){
-            lifecycleScope.launchWhenStarted {
-                episodesAdapter.submitData(it)
-            }
+        viewModel.episodeState.observe(viewLifecycleOwner) {
+            episodesAdapter.submitList(it.results)
+        }
+    }
+
+    private fun subscribeToEpisodeLocal() {
+        viewModel.episodeLocalState.observe(viewLifecycleOwner) {
+            episodesAdapter.submitList(it)
         }
     }
 

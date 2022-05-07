@@ -3,16 +3,13 @@ package com.example.newrickandmorty.ui.adapter.location
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.newrickandmorty.base.BaseDiffUtilItemCallback
-import com.example.newrickandmorty.common.extensions.setImage
-import com.example.newrickandmorty.data.models.CharacterModel
-import com.example.newrickandmorty.data.models.LocationModel
-import com.example.newrickandmorty.databinding.ItemCharacterBinding
+import com.example.newrickandmorty.data.remote.models.LocationModel
 import com.example.newrickandmorty.databinding.ItemLocationBinding
-import com.example.newrickandmorty.ui.adapter.character.CharacterAdapter
 
-class LocationAdapter () : PagingDataAdapter<LocationModel, LocationAdapter.LocationViewHolder>(
+class LocationAdapter () : ListAdapter<LocationModel, LocationAdapter.LocationViewHolder>(
     BaseDiffUtilItemCallback()
 ) {
 

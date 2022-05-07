@@ -2,15 +2,14 @@ package com.example.newrickandmorty.ui.adapter.character
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.paging.PagingDataAdapter
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.newrickandmorty.base.BaseDiffUtilItemCallback
 import com.example.newrickandmorty.common.extensions.setImage
-import com.example.newrickandmorty.data.models.CharacterModel
+import com.example.newrickandmorty.data.remote.models.CharacterModel
 import com.example.newrickandmorty.databinding.ItemCharacterBinding
 
-class CharacterAdapter ()
-    : PagingDataAdapter<CharacterModel, CharacterAdapter.CharacterViewHolder>(
+class CharacterAdapter : ListAdapter<CharacterModel, CharacterAdapter.CharacterViewHolder>(
     BaseDiffUtilItemCallback()
 ) {
 

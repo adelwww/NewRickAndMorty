@@ -1,10 +1,14 @@
-package com.example.newrickandmorty.data.models
+package com.example.newrickandmorty.data.remote.models
 
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import com.example.newrickandmorty.base.IBaseDiffModel
 import com.google.gson.annotations.SerializedName
 
+@Entity(tableName = "character")
 data class CharacterModel(
 
+    @PrimaryKey(autoGenerate = false)
     @SerializedName("id")
     override val id: Int,
 
@@ -25,4 +29,5 @@ data class CharacterModel(
 
     @SerializedName("image")
     val image: String
+
 ) : IBaseDiffModel

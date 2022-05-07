@@ -1,4 +1,4 @@
-package com.example.newrickandmorty.data.models
+package com.example.newrickandmorty.data.remote.models
 
 import com.google.gson.annotations.SerializedName
 

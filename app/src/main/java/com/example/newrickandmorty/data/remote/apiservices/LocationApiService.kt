@@ -1,7 +1,7 @@
 package com.example.newrickandmorty.data.remote.apiservices
 
-import com.example.newrickandmorty.data.models.LocationModel
-import com.example.newrickandmorty.data.models.RickAndMortyResponse
+import com.example.newrickandmorty.data.remote.models.LocationModel
+import com.example.newrickandmorty.data.remote.models.RickAndMortyResponse
 import retrofit2.http.GET
 import retrofit2.http.Query
 

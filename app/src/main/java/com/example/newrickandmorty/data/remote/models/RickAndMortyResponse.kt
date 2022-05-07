@@ -1,6 +1,5 @@
-package com.example.newrickandmorty.data.models
+package com.example.newrickandmorty.data.remote.models
 
-import android.icu.text.IDNA
 import com.google.gson.annotations.SerializedName
 
 data class RickAndMortyResponse<T>(

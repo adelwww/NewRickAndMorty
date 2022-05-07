@@ -1,31 +1,27 @@
 package com.example.newrickandmorty.ui.fragments.location
 
-import android.util.Log
-import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
-import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.example.newrickandmorty.R
 import com.example.newrickandmorty.base.BaseFragment
-import com.example.newrickandmorty.common.resource.Resource
 import com.example.newrickandmorty.databinding.FragmentLocationBinding
 import com.example.newrickandmorty.ui.adapter.location.LocationAdapter
-import com.example.newrickandmorty.ui.adapter.paging.CommonLoadStateAdapter
-import com.example.newrickandmorty.ui.fragments.character.CharacterViewModel
+import com.example.newrickandmorty.utils.PaginationScrollListener
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class LocationFragment  : BaseFragment<FragmentLocationBinding, LocationViewModel>(
+class LocationFragment : BaseFragment<FragmentLocationBinding, LocationViewModel>(
     R.layout.fragment_location
 ) {
+
     override val binding by viewBinding(FragmentLocationBinding::bind)
     override val viewModel: LocationViewModel by viewModels()
     private val locationAdapter = LocationAdapter()
 
     override fun setupObserves() {
         subscribeToLocation()
+        subscribeToLocationLocal()
     }
 
     override fun setupViews() {
@@ -33,20 +29,33 @@ class LocationFragment  : BaseFragment<FragmentLocationBinding, LocationViewMode
     }
 
     private fun setupAdapter() = with(binding.recyclerLocation) {
-        layoutManager = LinearLayoutManager(context)
-        adapter = locationAdapter.withLoadStateFooter(CommonLoadStateAdapter {
-            locationAdapter.refresh()
+        val linerLayoutManager = LinearLayoutManager(context)
+        layoutManager = linerLayoutManager
+        adapter = locationAdapter
+
+        addOnScrollListener(object :
+            PaginationScrollListener(linerLayoutManager, {
+                if (isOnline(context)) viewModel.fetchLocations()
+                else null
+            }) {
+            override fun isLoading() = viewModel.isLoading
         })
-        locationAdapter.addLoadStateListener { loadStates ->
-            this.isVisible = loadStates.refresh is LoadState.NotLoading
-        }
+    }
+
+    override fun setupRequests() {
+        if (viewModel.locationState.value == null && isOnline(context)) viewModel.fetchLocations()
+        else viewModel.getLocations()
     }
 
     private fun subscribeToLocation() {
-        viewModel.fetchLocations().observe(this){
-            lifecycleScope.launchWhenStarted {
-                locationAdapter.submitData(it)
-            }
+        viewModel.locationState.observe(viewLifecycleOwner) {
+            locationAdapter.submitList(it.results)
+        }
+    }
+
+    private fun subscribeToLocationLocal() {
+        viewModel.locationLocalState.observe(viewLifecycleOwner) {
+            locationAdapter.submitList(it)
         }
     }
 

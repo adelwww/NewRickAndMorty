@@ -1,17 +1,31 @@
 package com.example.newrickandmorty.base
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.liveData
-import androidx.paging.Pager
-import androidx.paging.PagingConfig
-import androidx.paging.PagingData
-import androidx.paging.liveData
 import com.example.newrickandmorty.common.resource.Resource
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.flow
 
-abstract class BaseRepository {
+open class BaseRepository {
 
-    protected fun <T> doRequest(request: suspend () -> T) = liveData(Dispatchers.IO) {
+    protected fun <T> doRequest(
+        request: suspend () -> T,
+        writeDatabase:suspend (data: T) -> Unit) =
+        flow {
+            emit(Resource.Loading())
+            try {
+                request().let {
+                    writeDatabase(it)
+                    emit(value = Resource.Success(data = it))
+                }
+            } catch (ioException: Exception) {
+                emit(
+                    Resource.Error(
+                        data = null, message = ioException.localizedMessage ?: "Error Occurred!"
+                    )
+                )
+            }
+        }
+
+    protected fun <T> doRequest(request: suspend () -> T) = flow {
         emit(Resource.Loading())
         try {
             emit(Resource.Success(data = request()))
@@ -22,29 +36,5 @@ abstract class BaseRepository {
                 )
             )
         }
-    }
-
-    protected fun <ValueDto : Any, Value : Any> doPagingRequest(
-        pagingSource: BasePagingSource<ValueDto, Value>,
-        pageSize: Int = 10,
-        prefetchDistance: Int = pageSize,
-        enablePlaceholder: Boolean = true,
-        initialLoadSize: Int = pageSize * 3,
-        maxSize: Int = Int.MAX_VALUE,
-        jumpThreshold: Int = Int.MIN_VALUE,
-    ): LiveData<PagingData<ValueDto>> {
-        return Pager(
-            config = PagingConfig(
-                pageSize,
-                prefetchDistance,
-                enablePlaceholder,
-                initialLoadSize,
-                maxSize,
-                jumpThreshold
-            ),
-            pagingSourceFactory = {
-                pagingSource
-            }
-        ).liveData
     }
 }
